@@ -14,10 +14,16 @@ select major, startmed from (select * from degreesthatpay order by startmed desc
 
 select (mid75-mid25) as iqr from degreesthatpay where ((mid75-mid25) <= all (select (mid75-mid25) from degreesthatpay);
 
-select schoolname, startmed, schooltype from (select * from salariesbycollege order by schooltype, startmed desc) where rownum <= 10;
+select schoolname, startmed, schooltype from salariesbycollege
+inner join(
 
-select schoolname, schooltype, startmed from salariesbycollege
+select schooltype, startmed from salariesbycollege order by schooltype, startmed desc) Ordered on 
+salariesbycollege.;
+
+select schoolname, salariesbycollege.schooltype, startmed from salariesbycollege
 inner join
 (
 select schooltype, max(startmed) as Salary from salariesbycollege group by schooltype) MaxPerType on
 salariesbycollege.schooltype = MaxPerType.schooltype and salariesbycollege.startmed = MaxPerType.Salary;
+
+select * from salariesbycollege where mid10 is null;
